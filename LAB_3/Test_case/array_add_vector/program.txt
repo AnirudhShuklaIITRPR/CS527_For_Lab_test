@@ -1,0 +1,27 @@
+% Vector Array Addition
+% C[i] = A[i] + B[i]
+% N must be a multiple of 8
+
+% Memory layout:
+% addr 0   = N
+% addr 4   = A[0] ... A[7]
+% addr 36  = B[0] ... B[7]
+% addr 68  = C[0] ... C[7]
+
+x1 = [0]          % N = 8
+x4 = x1 * 4       % N * 4 = 32 bytes
+
+x2 = 4             % address of A
+x3 = x2 + x4       % address of B = 36
+x5 = x3 + x4       % address of C = 68
+x6 = 0             % counter
+
+.loop
+v1 = [x2]          % load 8 elements from A
+v2 = [x3]          % load 8 elements from B
+v3 = v1 + v2       % vector addition
+[x5] = v3          % store 8 elements into C
+
+x6 = x6 + 8
+x7 = x6 - x1
+BLT .loop

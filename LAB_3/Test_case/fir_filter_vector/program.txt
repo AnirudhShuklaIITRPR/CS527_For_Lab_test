@@ -1,0 +1,48 @@
+% FIR Filter - 4 Tap Vector Test
+% Each vector lane represents one output sample.
+%
+% y[i] = h0*x0[i] + h1*x1[i] + h2*x2[i] + h3*x3[i]
+%
+% 8 samples are processed in parallel.
+%
+% Memory layout:
+% addr 0   : N = 8
+% addr 4   : X0[8]
+% addr 36  : X1[8]
+% addr 68  : X2[8]
+% addr 100 : X3[8]
+% addr 132 : Y[8]
+
+x1 = [0]          % N = 8
+x4 = x1 * 4       % 32 bytes per vector
+
+x2 = 4            % address X0
+x3 = x2 + x4      % address X1
+x5 = x3 + x4      % address X2
+x6 = x5 + x4      % address X3
+x7 = x6 + x4      % address Y
+
+% Load input vectors
+v1 = [x2]
+v2 = [x3]
+v3 = [x5]
+v4 = [x6]
+
+% FIR coefficients
+% h0 = 1
+% h1 = 2
+% h2 = 1
+% h3 = 1
+
+v5 = v1 * 1
+v6 = v2 * 2
+v7 = v3 * 1
+v8 = v4 * 1
+
+% Accumulate
+v5 = v5 + v6
+v5 = v5 + v7
+v5 = v5 + v8
+
+% Store output
+[x7] = v5
